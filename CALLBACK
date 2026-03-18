@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Calculadora</title>
+ 
+<style>
+body{
+    font-family: Times New Roman;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background:#026ffd;
+}
+ 
+.calculadora{
+    background:#03cdff;
+    padding:20px;
+    border-radius:20px;
+}
+ 
+#display{
+    width:95%;
+    height:50px;
+    font-size:20px;
+    text-align-last: justify;
+    margin-bottom:20px;
+    border-radius:20px;
+    color: #0a0a0a;
+     background:#fcfbfb;
+}
+ 
+button{
+    width:50px;
+    height:50px;
+    margin:10px;
+    font-size:30px;
+     border-radius:20px;
+     color: #03cdff;
+    
+}
+
+</style>
+</head>
+ 
+<body>
+ 
+<div class="calculadora">
+ 
+<input type="text" id="display" disabled>
+ 
+<br>
+ 
+<button onclick="numero(7)">7</button>
+<button onclick="numero(8)">8</button>
+<button onclick="numero(9)">9</button>
+<button onclick="operador('/')">/</button>
+ 
+<br>
+ 
+<button onclick="numero(4)">4</button>
+<button onclick="numero(5)">5</button>
+<button onclick="numero(6)">6</button>
+<button onclick="operador('*')">*</button>
+ 
+<br>
+ 
+<button onclick="numero(1)">1</button>
+<button onclick="numero(2)">2</button>
+<button onclick="numero(3)">3</button>
+<button onclick="operador('-')">-</button>
+ 
+<br>
+ 
+<button onclick="numero(0)">0</button>
+<button onclick="limpar()">C</button>
+<button onclick="calcular()">=</button>
+<button onclick="operador('+')">+</button>
+ 
+</div>
+ 
+<script>
+
+let numero1 = ""
+let numero2 = ""
+let operacaoCallback = null
+
+function atualizarDisplay(valor){
+    document.getElementById("display").value += valor
+}
+
+// CALLBACKS (funções de operação)
+const operacoes = {
+    soma: (a, b) => a + b,
+    subtracao: (a, b) => a - b,
+    multiplicacao: (a, b) => a * b,
+    divisao: (a, b) => a / b
+}
+
+function numero(valor){
+    atualizarDisplay(valor)
+
+    if(operacaoCallback === null){
+        numero1 += valor
+    }else{
+        numero2 += valor
+    }
+}
+
+function operador(tipo){
+
+    switch(tipo){
+        case "+":
+            operacaoCallback = operacoes.soma
+            break
+        case "-":
+            operacaoCallback = operacoes.subtracao
+            break
+        case "*":
+            operacaoCallback = operacoes.multiplicacao
+            break
+        case "/":
+            operacaoCallback = operacoes.divisao
+            break
+    }
+
+    atualizarDisplay(tipo)
+}
+
+function calcular(){
+
+    let n1 = Number(numero1)
+    let n2 = Number(numero2)
+
+    if(operacaoCallback){
+        let resultado = operacaoCallback(n1, n2) // 💥 CALLBACK AQUI
+
+        document.getElementById("display").value = resultado
+
+        numero1 = resultado.toString()
+        numero2 = ""
+        operacaoCallback = null
+    }
+}
+
+function limpar(){
+    document.getElementById("display").value = ""
+    numero1 = ""
+    numero2 = ""
+    operacaoCallback = null
+}
+
+</script>
+ 
+</body>
+</html>
